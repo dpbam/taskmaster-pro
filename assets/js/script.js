@@ -87,7 +87,7 @@ $(".list-group").on("click", "p", function() {
 
   // replace p element with a new textarea
   var textInput = $("<textarea>")
-  addClass("form-control")
+  .addClass("form-control")
   .val(text);
   $(this).replaceWith(textInput);
 

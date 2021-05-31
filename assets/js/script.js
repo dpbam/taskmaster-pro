@@ -78,6 +78,7 @@ $("#task-form-modal .btn-primary").click(function() {
   }
 });
 
+// task text was clicked
 $(".list-group").on("click", "p", function() {
   // get current text of p element
   var text = $(this)
@@ -98,8 +99,7 @@ $(".list-group").on("click", "p", function() {
 $("list-group").on("blur", "textarea", function() {
   //  get the textarea's current value/text
   var text = $(this)
-  .val()
-  .trim();
+  .val();
 
   //  get status type and position in the list
   var status = $(this)
@@ -141,7 +141,7 @@ $(".list-group").on("click", "span", function() {
   // swap out elements
   $(this).replaceWith(dateInput);
 
-  // automatically focus on new element
+  // automatically bring up the calendar
   dateInput.trigger("focus");
 });
 
@@ -149,10 +149,9 @@ $(".list-group").on("click", "span", function() {
 $("list-group").on("blur", "input[type='text']", function() {
   // get current text
   var date = $(this)
-  .val()
-  .trim();
+  .val();
 
-  // get the parent ul's id attribute
+  // get the parent ul's id attribute (get status type and position in the list)
   var status = $(this)
   .closest(".list-group")
   .attr("id")

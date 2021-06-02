@@ -101,20 +101,23 @@ $(".list-group").on("blur", "textarea", function() {
   var text = $(this)
     .val()
     .trim();
+  console.log(text);
 
   // get status type and position in the list
   var status = $(this)
     .closest(".list-group")
     .attr("id")
     .replace("list-", "");
+  console.log(status);
 
   // get the task's position in the list of other li elements
   var index = $(this)
     .closest(".list-group-item")
     .index();
+  console.log(index);
 
   // update task in array and re-save to localStorage
-  tasks[status][index].text = text;
+  tasks[status][index] = {text: text};
   saveTasks();
 
   // recreate p element
@@ -152,6 +155,7 @@ $(".list-group").on("blur", "input[type='text']", function() {
   var date = $(this)
     .val()
     .trim();
+  console.log(date);
 
   // get the parent ul's id attribute (get status type and position in the list)
   var status = $(this)
@@ -165,7 +169,7 @@ $(".list-group").on("blur", "input[type='text']", function() {
     .index();
 
   // update task in array and re-save to localstorage
-  tasks[status][index].date = date;
+  tasks[status][index] = {date: date};
   saveTasks();
 
   // recreate span element with bootstrap classes and insert in place of input element
@@ -184,6 +188,53 @@ $("#remove-tasks").on("click", function() {
     $("#list-" + key).empty();
   }
   saveTasks();
+});
+
+$(".card .list-group").sortable({
+  connectWith: $(".card .list-group"),
+  scroll: false,
+  tolerance: "pointer",
+  helper: "clone",
+  activate: function(event) {
+    console.log("activate", this);
+  },
+  deactivate: function(event) {
+    console.log("deactivate", this);
+  },
+  over: function(event) {
+    console.log("over", event.target);
+  },
+  out: function(event) {
+    console.log("out", event.target);
+  },
+
+  update: function(event) {
+    // array to store the task data in
+    var tempArr = [];
+
+    // loop over current set of children in sortable list
+    $(this).children().each(function() {
+      var text = $(this)
+        .find("p")
+        .text()
+        .trim();
+
+      var date = $(this)
+        .find("span")
+        .text()
+        .trim();
+
+      console.log(text, date);
+    });
+    // trim down list's ID to match object property
+    var arrName = $(this)
+    .attr("id")
+    .replace("list-", "");
+
+    // update array on tasks object and save
+    tasks[arrName] = tempArr;
+    saveTasks();
+  }
 });
 
 // load tasks for the first time

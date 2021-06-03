@@ -86,10 +86,8 @@ $(".list-group").on("click", "p", function() {
     .trim();
 
   // replace p element with a new textarea
-  var textInput = $("<textarea>")
-    .addClass("form-control")
-    .val(text);
-    $(this).replaceWith(textInput);
+  var textInput = $("<textarea>").addClass("form-control").val(text);
+  $(this).replaceWith(textInput);
 
   // auto focus new element
   textInput.trigger("focus");
@@ -145,17 +143,25 @@ $(".list-group").on("click", "span", function() {
   // swap out elements
   $(this).replaceWith(dateInput);
 
+  // enable jquery ui datepicker
+  dateInput.datepicker({
+    minDate: 1,
+    onClose: function() {
+      // when calendar is closedl, force a "change" event on the 'dateInput'
+      $(this).trigger("change");
+    }
+  });
+
   // automatically bring up the calendar
   dateInput.trigger("focus");
 });
 
 //  value of due date was changed
-$(".list-group").on("blur", "input[type='text']", function() {
+$(".list-group").on("change", "input[type='text']", function() {
   // get current text
   var date = $(this)
     .val()
     .trim();
-  console.log(date);
 
   // get the parent ul's id attribute (get status type and position in the list)
   var status = $(this)
@@ -190,7 +196,9 @@ $("#remove-tasks").on("click", function() {
   saveTasks();
 });
 
+// enable draggable/sortable feature on list-group elements
 $(".card .list-group").sortable({
+    // enable dragging across lists
   connectWith: $(".card .list-group"),
   scroll: false,
   tolerance: "pointer",
@@ -224,7 +232,6 @@ $(".card .list-group").sortable({
         .text()
         .trim();
 
-      console.log(text, date);
     });
     // trim down list's ID to match object property
     var arrName = $(this)
@@ -241,6 +248,7 @@ $("#trash").droppable({
   accept: ".card .list-group-item",
   tolerance: "touch",
   drop: function(event, ui) {
+    // remove dragged element from the dom
     ui.draggable.remove();
     console.log("drop");
   },
@@ -250,6 +258,10 @@ $("#trash").droppable({
   out: function(event, ui) {
     console.log("out");
   }
+});
+
+$("#modalDueDate").datepicker({
+  minDate: 1
 });
 
 // load tasks for the first time
